@@ -103,7 +103,7 @@ func NewRunner(options *Options) (*Runner, error) {
 		}
 	}
 
-	log.Printf("[*] Loaded %d CT logs", len(r.logClients))
+	log.Printf("[*] Initializing All CT logs", len(r.logClients))
 	r.entryTasksChan = make(chan types.EntryTask, len(r.logClients)*100)
 
 	return r, nil
@@ -417,7 +417,8 @@ func (r *Runner) persistDomain(domain string, matchedRoot string) (bool, error) 
 	}
 	defer f.Close()
 
-	if _, err := f.WriteString(domain + "\n"); err != nil {
+	line := fmt.Sprintf("Hostname: %s\n", domain)
+	if _, err := f.WriteString(line); err != nil {
 		return false, err
 	}
 
@@ -472,6 +473,16 @@ func (r *Runner) loadResultsFromFile(path string) (int, error) {
 		if line == "" || strings.HasPrefix(line, "#") {
 			continue
 		}
+
+		lower := strings.ToLower(line)
+		if strings.HasPrefix(lower, "hostname:") {
+			line = strings.TrimSpace(line[len("Hostname:"):])
+		}
+
+		if line == "" {
+			continue
+		}
+
 		norm := strings.ToLower(line)
 		r.seenDomain[norm] = true
 		count++
