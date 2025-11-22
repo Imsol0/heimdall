@@ -1,4 +1,4 @@
-# Heimdall — Gungnir-Style Certificate Transparency Monitor
+# Heimdall - Certificate Transparency Monitor
 
 Heimdall is a modern continuation of the original **Gungnir** workflow: a Go CLI that tails Certificate Transparency logs, writes `Hostname: sub.domain.tld` records per monitored root, and notifies you the moment new certificates appear for your estate. It keeps the beloved Gungnir experience while adding automatic CT log discovery, persistent deduplication, Discord alerts, and hot-reloadable root lists.
 
@@ -194,4 +194,5 @@ This will create:
 ## How It Works
 
 Heimdall automatically connects to ALL active CT logs from Google's official log list. It monitors them in real-time and extracts domains from certificates as they are issued. When running with `-r` and `-o`, it writes new domains either into per-root files (directory mode) or a single file (when you pass a `.txt` path), exactly like Gungnir. With `-f`, Heimdall watches your `domains.txt` for changes and restarts scanning automatically. When `-discord-webhook` is provided, each new domain is deduplicated and delivered instantly to your Discord channel.
+
 
